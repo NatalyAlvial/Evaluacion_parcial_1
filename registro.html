@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HuertoHogar · Registro & Login</title>
+
+  <!-- Fuentes y Bootstrap -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <style>
+
+    body { font-family: 'Montserrat', sans-serif; background:#F7F7F7; color:#333; margin:0; }
+    header, footer { background:#2E8B57; color:white; text-align:center; padding:1rem; }
+    nav.navbar { background:#2E8B57; }
+    nav.navbar a.logo { font-family:'Playfair Display',serif; font-size:1.5rem; color:white; text-decoration:none; }
+    nav.navbar ul.menu { list-style:none; display:flex; justify-content:center; gap:2rem; margin:0; padding:0; }
+    nav.navbar ul.menu li a { color:white; text-decoration:none; font-weight:500; }
+    main.container { max-width:800px; margin:2rem auto; background:white; padding:2rem; border-radius:12px; box-shadow:0 3px 10px rgba(0,0,0,0.1); }
+
+
+    input, button { width:100%; padding:.6rem; margin:.5rem 0; border-radius:6px; border:1px solid #ccc; font-size:.95rem; }
+    input:focus { border-color:#2E8B57; outline:none; box-shadow:0 0 4px rgba(46,139,87,.4); }
+    button { background:#2E8B57; color:white; border:none; font-weight:500; cursor:pointer; }
+    button:hover { background:#246b46; }
+
+
+    .alert { padding:.7rem; margin-top:.6rem; border-radius:6px; font-size:.9rem; }
+    .alert-success { background:#d4edda; color:#155724; }
+    .alert-error { background:#f8d7da; color:#721c24; }
+    .alert-warning { background:#FFD700; color:#333; font-weight:600; }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo">🥑 HuertoHogar</a>
+      <ul class="menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="producto.html">Producto</a></li>
+        <li><a href="registro.html" class="active">Registro / Login</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main class="container">
+  <!-- Tabs: Registro y Login -->
+  <ul class="nav nav-tabs" id="tabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="tab-reg" data-bs-toggle="tab" data-bs-target="#pane-reg" type="button">Registro</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="tab-login" data-bs-toggle="tab" data-bs-target="#pane-login" type="button">Login</button>
+    </li>
+  </ul>
+
+  <div class="tab-content mt-3">
+
+    <div class="tab-pane fade show active" id="pane-reg">
+      <form id="formRegistro">
+        <input type="text" id="nombre" placeholder="Nombre Completo" required>
+        <div class="form-text">Máximo 50 caracteres. Solo letras y espacios.</div>
+
+        <input type="email" id="correo" placeholder="Correo @duoc.cl" required>
+        <div class="form-text">Debe ser con @ y no estar registrado.</div>
+
+        <input type="password" id="password" placeholder="Contraseña" required>
+        <input type="password" id="password2" placeholder="Repite Contraseña" required>
+
+        <input type="text" id="codigo" placeholder="Código de descuento (ej: FELICES50)">
+
+        <button type="submit">Registrar</button>
+      </form>
+
+      <!-- Aquí se muestran alertas de registro (éxito/errores) -->
+      <div id="registroMsg"></div>
+    </div>
+
+
+
+
+    <div class="tab-pane fade" id="pane-login">
+      <form id="formLogin">
+        <input type="email" id="loginCorreo" placeholder="Correo electrónico" required>
+        <input type="password" id="loginPassword" placeholder="Contraseña" required>
+        <button type="submit">Iniciar Sesión</button>
+      </form>
+      <div id="loginMsg"></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>© 2025 HuertoHogar · Todos los derechos reservados</p>
+</footer>
+
+<!-- Bootstrap JS (necesario para tabs) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  /*
+
+
+  */
+  document.getElementById("formRegistro").addEventListener("submit", e => {
+    e.preventDefault(); // Evita envío al servidor y recarga de la página
+
+    // Tomamos valores del formulario, aplicando .trim() para quitar espacios al inicio/final
+    const nombre = document.getElementById("nombre").value.trim();
+    const correo = document.getElementById("correo").value.trim();
+    const pass = document.getElementById("password").value;
+    const pass2 = document.getElementById("password2").value;
+    const codigo = document.getElementById("codigo").value.trim();
+    const msg = document.getElementById("registroMsg");
+    msg.innerHTML = ""; // Limpiamos mensaje previo
+
+    // Validación básica: campos obligatorios
+    if (!nombre || !correo || !pass || !pass2) {
+      msg.innerHTML = "<div class='alert alert-error'>Todos los campos son obligatorios.</div>";
+      return; // Salimos porque falta información
+    }
+
+    // Validación: contraseñas iguales
+    if (pass !== pass2) {
+      msg.innerHTML = "<div class='alert alert-error'>Las contraseñas no coinciden.</div>";
+      return;
+    }
+
+ 
+    let alertas = "<div class='alert alert-success'>Registro exitoso. Bienvenido/a " + nombre + ".</div>";
+
+
+    if (correo.toLowerCase().includes("@duoc")) {
+      alertas += "<div class='alert alert-warning'>Tienes un 20% de descuento por correo Duoc.</div>";
+    }
+    if (codigo === "FELICES50") {
+      alertas += "<div class='alert alert-warning'>Descuento del 10% con código FELICES50</div>";
+    }
+
+    // Mostramos alertas al usuario
+    msg.innerHTML = alertas;
+
+
+  });
+
+  /*
+
+  */
+  document.getElementById("formLogin").addEventListener("submit", e => {
+    e.preventDefault();
+    const correo = document.getElementById("loginCorreo").value.trim();
+    const pass = document.getElementById("loginPassword").value;
+    const msg = document.getElementById("loginMsg");
+
+    // Mensaje simple de validación
+    if (correo && pass) {
+      msg.innerHTML = "<div class='alert alert-success'>Usuario logueado correctamente.</div>";
+    } else {
+      msg.innerHTML = "<div class='alert alert-error'>Debes ingresar tus credenciales.</div>";
+    }
+  });
+</script>
+</body>
+</html>
