@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HuertoHogar · Detalle Producto</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    /* Estilos principales para la vista de detalle */
+    body { font-family: 'Montserrat', sans-serif; background:#F7F7F7; margin:0; }
+    header, footer { background:#2E8B57; color:white; text-align:center; padding:1rem; }
+    .container { max-width:900px; margin:auto; padding:2rem; }
+    h1 { color:#8B4513; }
+    .producto-detalle { display:flex; flex-wrap:wrap; gap:2rem; align-items:center; }
+    .producto-detalle img { max-width:350px; border-radius:12px; box-shadow:0 3px 10px rgba(0,0,0,0.2); }
+    .precio { font-size:1.5rem; font-weight:bold; color:#2E8B57; }
+    .btn { background:#2E8B57; color:white; border:none; padding:.6rem 1.2rem; border-radius:6px; text-decoration:none; }
+    .btn:hover { background:#246b46; }
+    .btn-danger { background:#c0392b; }
+    .btn-danger:hover { background:#922b21; }
+
+    #carritoResumen { margin-top:2rem; background:#FFD700; padding:1rem; border-radius:8px; color:#333; }
+
+    /* Reseñas: textarea y lista */
+    #resenas { margin-top:2rem; }
+    #resenas textarea { resize:none; width:100%; margin-bottom:0.5rem; }
+    #listaResenas p { background:#f1f1f1; padding:.5rem; border-radius:6px; margin-bottom:.5rem; text-align:left; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h2>🥑 HuertoHogar</h2>
+</header>
+
+<main class="container">
+  <!--contenedor se llenará dinámicamente según el producto en la URL -->
+  <div id="detalleProducto" class="producto-detalle"></div>
+
+  <!-- Sección de reseñas-->
+  <section id="resenas">
+    <h3>📝 Reseñas</h3>
+    <textarea id="textoResena" rows="3" placeholder="Escribe tu reseña..."></textarea>
+    <button class="btn" onclick="guardarResena()">Enviar Reseña</button>
+    <div id="listaResenas" class="mt-3"></div>
+  </section>
+
+  <!-- Volver al catálogo -->
+  <a href="producto.html" class="btn mt-4">⬅ Volver al Catálogo</a>
+
+  <!-- Resumen del carrito -->
+  <section id="carritoResumen">
+    <h2>🛒 Carrito</h2>
+    <p id="carritoItems">0 productos</p>
+    <p id="carritoTotal">Total: $0</p>
+  </section>
+</main>
+
+<footer>
+  <p>© 2025 HuertoHogar · Todos los derechos reservados</p>
+</footer>
+
+<script>
+  /* =========================================================
+     Objeto "productos"
+     - Mapa simple que contiene los datos que mostraremos
+     - En producción estos datos vendrían desde un backend/API
+     ========================================================= */
+  const productos = {
+    manzanas: {
+      nombre: "Manzanas Fuji",
+      precio: 1200,
+      img: "assets/img/manzanas.jpg",
+      descripcion: "Manzanas Fuji frescas, jugosas y dulces, ideales para colaciones y postres."
+    },
+    naranjas: {
+      nombre: "Naranjas Valencia",
+      precio: 1000,
+      img: "assets/img/naranjas.jpg",
+      descripcion: "Naranjas Valencia de excelente calidad, perfectas para jugos naturales."
+    },
+    zanahorias: {
+      nombre: "Zanahorias Orgánicas",
+      precio: 900,
+      img: "assets/img/zanahorias.jpg",
+      descripcion: "Zanahorias cultivadas sin químicos, llenas de vitaminas y sabor natural."
+    },
+    miel: {
+      nombre: "Miel Orgánica",
+      precio: 5000,
+      img: "assets/img/miel.jpg",
+      descripcion: "Miel 100% orgánica, producida de manera artesanal por apicultores locales."
+    },
+    leche: {
+      nombre: "Leche Entera",
+      precio: 1200,
+      img: "assets/img/leche.jpg",
+      descripcion: "Leche entera fresca, proveniente de vacas alimentadas de manera natural."
+    }
+  };
+
+  /* =========================================================
+     Lectura del parámetro 'producto' de la URL
+     - Ejemplo: detalle.html?producto=manzanas
+     - URLSearchParams facilita extraer parámetros de query string
+     ========================================================= */
+  const params = new URLSearchParams(window.location.search);
+  const clave = params.get("producto"); // ej. "manzanas"
+  const detalle = document.getElementById("detalleProducto");
+
+  /* =========================================================
+     Renderizado del detalle:
+     - Si existe el producto en el objeto 'productos' lo mostramos.
+     - Insertamos botones para Agregar y Eliminar del carrito.
+     - Se usa innerHTML por simplicidad (en producción conviene sanitizar)
+     ========================================================= */
+  if (productos[clave]) {
+    const p = productos[clave];
+
+    /* 
+      Construimos el HTML del detalle:
+      - Imagen
+      - Nombre, precio y descripción
+      - Botones para agregar y eliminar del carrito
+    */
+    detalle.innerHTML = `
+      <img src="${p.img}" alt="${p.nombre}">
+      <div>
+        <h1>${p.nombre}</h1>
+        <p class="precio">$${p.precio.toLocaleString()}</p>
+        <p>${p.descripcion}</p>
+
+        <!-- Botón para agregar una unidad del producto al carrito -->
+        <button class="btn" onclick="agregarCarrito('${p.nombre}', ${p.precio})">🛒 Agregar al Carrito</button>
+
+        <!-- Botón para eliminar una unidad del carrito (si existe) -->
+        <button class="btn btn-danger" onclick="eliminarCarrito('${p.nombre}')">🗑 Eliminar del Carrito</button>
+      </div>
+    `;
+  } else {
+    // Si la 'clave' no corresponde a ningún producto, mostramos mensaje de error.
+    detalle.innerHTML = "<p>❌ Producto no encontrado.</p>";
+  }
+
+  /* =========================================================
+     Función agregarCarrito(nombre, precio)
+     - Lee el carrito de localStorage (clave "carrito")
+     - Agrega el objeto { nombre, precio } al array
+     - Guarda nuevamente el array en localStorage
+     - Llama a actualizarCarrito() para reflejar cambios en la UI
+     ========================================================= */
+  function agregarCarrito(nombre, precio) {
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || []; // recupera o [] si no existe
+    carrito.push({ nombre, precio }); // añadimos una unidad del producto
+    localStorage.setItem("carrito", JSON.stringify(carrito)); // guardamos
+    actualizarCarrito(); // actualiza vista (items y total)
+    alert(nombre + " agregado al carrito ✅"); // feedback para el usuario
+  }
+
+  /* =========================================================
+     Función eliminarCarrito(nombre)
+     - Busca la primera ocurrencia del producto por nombre y la borra.
+     - Si hay duplicados (múltiples unidades), solo elimina una.
+     - Actualiza localStorage y la vista.
+     - Nota: comportamiento simple; para manejo avanzado de cantidades,
+             podrías almacenar { nombre, precio, cantidad } en cada entry.
+     ========================================================= */
+  function eliminarCarrito(nombre) {
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    // findIndex para obtener posición del primer elemento que cumpla la condición
+    const index = carrito.findIndex(p => p.nombre === nombre);
+    if (index !== -1) {
+      // Splice elimina el elemento en el índice dado
+      carrito.splice(index, 1);
+      localStorage.setItem("carrito", JSON.stringify(carrito)); // re-guardar
+      actualizarCarrito(); // refrescar UI
+      alert(nombre + " eliminado del carrito ❌");
+    } else {
+      // Si no se encuentra el producto mostramos aviso
+      alert("El producto no está en el carrito.");
+    }
+  }
+
+  /* =========================================================
+     Función actualizarCarrito()
+     - Lee el carrito desde localStorage
+     - Actualiza el contador y el total mostrado
+     - Total se calcula sumando precios (reduce)
+     ========================================================= */
+  function actualizarCarrito() {
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    // Cantidad de elementos en el carrito
+    document.getElementById("carritoItems").textContent = carrito.length + " productos";
+    // Suma de precios
+    let total = carrito.reduce((acc, p) => acc + p.precio, 0);
+    // Mostramos total con formato de miles
+    document.getElementById("carritoTotal").textContent = "Total: $" + total.toLocaleString();
+  }
+
+  /* =========================================================
+     Reseñas (por producto) usando localStorage
+     - Guardamos reseñas con clave "resenas_<claveProducto>"
+     - Cada reseña es un string simple (podrías cambiarlo por objeto con autor/fecha)
+     ========================================================= */
+  function guardarResena() {
+    const textarea = document.getElementById("textoResena");
+    const texto = textarea.value.trim();
+    if (!texto) return; // si está vacío no hacemos nada
+
+    // Clave específica por producto (para separar reseñas por producto)
+    const claveResena = "resenas_" + clave;
+    // Leemos arreglo de reseñas o inicializamos []
+    let resenas = JSON.parse(localStorage.getItem(claveResena)) || [];
+    resenas.push(texto); // agregamos la nueva reseña al final
+    localStorage.setItem(claveResena, JSON.stringify(resenas)); // guardamos
+    textarea.value = ""; // limpiamos textarea
+    mostrarResenas(); // refrescamos la lista en pantalla
+  }
+
+  function mostrarResenas() {
+    const claveResena = "resenas_" + clave;
+    const resenas = JSON.parse(localStorage.getItem(claveResena)) || [];
+    const contenedor = document.getElementById("listaResenas");
+    contenedor.innerHTML = ""; // limpiamos antes de renderizar
+
+    // Mostramos en orden inverso (más recientes arriba)
+    resenas.slice().reverse().forEach(r => {
+      // Creamos un párrafo por reseña y lo añadimos al contenedor
+      const p = document.createElement("p");
+      p.textContent = "🗨️ " + r;
+      contenedor.appendChild(p);
+    });
+  }
+
+  /*
+    Al cargar la página:
+    - Actualizamos el resumen del carrito
+    - Mostramos las reseñas del producto
+    */
+  document.addEventListener("DOMContentLoaded", () => {
+    actualizarCarrito(); // sincroniza visual del carrito con localStorage
+    mostrarResenas();     // carga y muestra reseñas (si existen)
+  });
+</script>
+</body>
+</html>
