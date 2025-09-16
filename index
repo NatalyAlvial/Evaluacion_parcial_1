@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HuertoHogar · Inicio</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body { 
+      font-family: 'Montserrat', sans-serif; 
+      background: #F7F7F7; 
+      color: #333333; 
+      margin:0; 
+    }
+    header, footer { 
+      background: #2E8B57; 
+      color: white; 
+      text-align: center; 
+      padding: 1rem; 
+    }
+    nav.navbar { background:#2E8B57; }
+    nav.navbar a.logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color:white; text-decoration:none; }
+    nav.navbar ul.menu { list-style:none; padding:0; display:flex; justify-content:center; gap:2rem; margin:0; }
+    nav.navbar ul.menu li a { color:white; text-decoration:none; font-weight:500; }
+    nav.navbar ul.menu li a:hover { text-decoration:underline; }
+    .container { max-width:1100px; margin:auto; padding:2rem 1rem; }
+    h1,h2,h3 { font-family:'Playfair Display', serif; color:#8B4513; }
+    h1 { font-size:2rem; }
+    .hero { text-align:center; padding:4rem 1rem; }
+    .hero h1 { margin-bottom:1rem; }
+    .hero p { color:#666666; margin-bottom:1.5rem; }
+    .hero .btn { background:#2E8B57; color:white; border:none; padding:.7rem 1.5rem; border-radius:5px; font-weight:500; text-decoration:none; }
+    .hero .btn:hover { background:#246b46; }
+    .about article { margin-bottom:2rem; }
+    .categories .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1.5rem; margin-top:1rem; }
+    .categories .card { background:white; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,.1); padding:1rem; text-align:center; }
+    .categories .card img { width:100%; height:160px; object-fit:cover; border-radius:8px; }
+    .categories .card a.btn { margin-top:0.5rem; display:inline-block; }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo">🥑 HuertoHogar</a>
+      <ul class="menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="producto.html">Producto</a></li>
+        <li><a href="registro.html">Registro / Login</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <h1>¡Descubre la frescura del campo con HuertoHogar!</h1>
+    <p>Conéctate con la naturaleza y lleva lo mejor del campo a tu mesa 🍎🥦🥛</p>
+    <a href="producto.html" class="btn">Ver Catálogo</a>
+  </section>
+
+  <section class="about">
+    <article>
+      <h2>Misión</h2>
+      <p>Proporcionar productos frescos y de calidad directamente desde el campo hasta la puerta de nuestros clientes, fomentando prácticas agrícolas sostenibles y una alimentación saludable.</p>
+    </article>
+    <article>
+      <h2>Visión</h2>
+      <p>Ser la tienda online líder en la distribución de productos frescos y naturales en Chile, reconocida por nuestra calidad, servicio y compromiso con la sostenibilidad.</p>
+    </article>
+  </section>
+
+  <section class="categories">
+    <h2>Categorías</h2>
+    <div class="grid">
+      <div class="card">
+        <img src="assets/img/frutas.jpg" alt="Frutas">
+        <h3>Frutas</h3>
+        <a href="producto.html#frutas" class="btn">Ver Productos</a>
+      </div>
+      <div class="card">
+        <img src="assets/img/verduras.jpg" alt="Verduras">
+        <h3>Verduras</h3>
+        <a href="producto.html#verduras" class="btn">Ver Productos</a>
+      </div>
+      <div class="card">
+        <img src="assets/img/organicos.jpg" alt="Orgánicos">
+        <h3>Orgánicos</h3>
+        <a href="producto.html#organicos" class="btn">Ver Productos</a>
+      </div>
+      <div class="card">
+        <img src="assets/img/lacteos.jpg" alt="Lácteos">
+        <h3>Lácteos</h3>
+        <a href="producto.html#lacteos" class="btn">Ver Productos</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>© 2025 HuertoHogar · Todos los derechos reservados</p>
+</footer>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
